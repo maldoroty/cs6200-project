@@ -1,0 +1,72 @@
+{
+    "Flu": [
+        "https://www.mayoclinic.org/diseases-conditions/flu/symptoms-causes/syc-20351719",
+        "https://www.cdc.gov/flu/symptoms/symptoms.htm",
+        "https://my.clevelandclinic.org/health/diseases/4335-influenza-flu",
+        "https://en.wikipedia.org/wiki/Influenza",
+        "https://www.webmd.com/cold-and-flu/ss/slideshow-flu-symptoms-treatment"
+    ],
+    "Covid": [
+        "https://www.cdc.gov/coronavirus/2019-ncov/symptoms-testing/symptoms.html",
+        "https://www.who.int/health-topics/coronavirus#tab=tab_3",
+        "https://www.mayoclinic.org/diseases-conditions/coronavirus/symptoms-causes/syc-20479963",
+        "https://en.wikipedia.org/wiki/COVID-19",
+        "https://www.nhs.uk/conditions/covid-19/covid-19-symptoms-and-what-to-do/"
+    ],
+    "Diabetes": [
+        "https://www.mayoclinic.org/diseases-conditions/diabetes/symptoms-causes/syc-20371444",
+        "https://www.webmd.com/diabetes/understanding-diabetes-symptoms",
+        "https://www.cdc.gov/diabetes/basics/symptoms.html",
+        "https://www2.diabetes.org/diabetes/type-1/symptoms",
+        "https://www.mayoclinic.org/diseases-conditions/diabetes/in-depth/diabetes-symptoms/art-20044248"
+    ],
+    "Addisons Disease": [
+        "https://www.mayoclinic.org/diseases-conditions/addisons-disease/symptoms-causes/syc-20350293",
+        "https://my.clevelandclinic.org/health/diseases/15095-addisons-disease",
+        "https://www.hopkinsmedicine.org/health/conditions-and-diseases/underactive-adrenal-glands--addisons-disease",
+        "https://www.webmd.com/a-to-z-guides/understanding-addisons-disease-symptoms"
+    ],
+    "Depression": [
+        "https://www.mayoclinic.org/diseases-conditions/depression/symptoms-causes/syc-20356007",
+        "https://www.medicalnewstoday.com/articles/326769",
+        "https://my.clevelandclinic.org/health/diseases/9290-depression",
+        "https://www.healthline.com/health/depression/recognizing-symptoms",
+        "https://www.nimh.nih.gov/health/topics/depression"
+    ],
+    "Cardiac Arrest": [
+        "https://www.hopkinsmedicine.org/health/conditions-and-diseases/cardiac-arrest",
+        "https://www.mayoclinic.org/diseases-conditions/sudden-cardiac-arrest/symptoms-causes/syc-20350634",
+        "https://www.nhlbi.nih.gov/health/cardiac-arrest/symptoms",
+        "https://www.cdc.gov/heartdisease/cardiac-arrest.htm",
+        "https://www.heart.org/en/health-topics/cardiac-arrest/emergency-treatment-of-cardiac-arrest"
+    ],
+    "Asthma": [
+        "https://www.mayoclinic.org/diseases-conditions/asthma/symptoms-causes/syc-20369653",
+        "https://www.webmd.com/asthma/asthma-symptoms",
+        "https://www.nhlbi.nih.gov/health/asthma/symptoms",
+        "https://www.nhlbi.nih.gov/health/asthma/causes",
+        "https://acaai.org/asthma/symptoms/",
+        "https://my.clevelandclinic.org/health/diseases/6424-asthma"
+    ],
+    "Glaucoma": [
+        "https://www.mayoclinic.org/diseases-conditions/glaucoma/symptoms-causes/syc-20372839",
+        "https://my.clevelandclinic.org/health/diseases/4212-glaucoma",
+        "https://www.nei.nih.gov/learn-about-eye-health/eye-conditions-and-diseases/glaucoma",
+        "https://www.aao.org/eye-health/diseases/what-is-glaucoma",
+        "https://www.webmd.com/eye-health/glaucoma-eyes"
+    ],
+    "Leukemia": [
+        "https://www.mayoclinic.org/diseases-conditions/leukemia/symptoms-causes/syc-20374373",
+        "https://my.clevelandclinic.org/health/diseases/4365-leukemia",
+        "https://www.mskcc.org/cancer-care/types/leukemias/symptoms",
+        "https://www.hematology.org/education/patients/blood-cancers/leukemia",
+        "https://www.webmd.com/cancer/lymphoma/understanding-leukemia-basics"
+    ],
+    "Crohns Disease": [
+        "https://www.mayoclinic.org/diseases-conditions/crohns-disease/symptoms-causes/syc-20353304#:~:text=Crohn\"s%20disease%20is%20an%20inflammatory,deeper%20layers%20of%20the%20bowel.",
+        "https://www.crohnscolitisfoundation.org/what-is-crohns-disease/symptoms",
+        "https://medlineplus.gov/crohnsdisease.html",
+        "https://my.clevelandclinic.org/health/diseases/9357-crohns-disease",
+        "https://www.pennmedicine.org/for-patients-and-visitors/patient-information/conditions-treated-a-to-z/crohns-disease"
+    ]
+}
