@@ -2,6 +2,7 @@ import requests
 from bs4 import BeautifulSoup
 import json
 import re
+from BM25 import BM25, mean_avg_precision
 
 def load_json(json_file):
     with open(json_file) as file:
@@ -36,19 +37,21 @@ def scrape_websites(websites):
     write_json(doc_data, "doc_data.json")
 
 def annotate_data(queries, doc_data):
-    annotate_data = []
-    for i, (query, disease) in enumerate(queries):
-        annotate_data.append({query: {}})
-        disease = disease[:3]
-        documents = doc_data["documents"]
-        for document in documents:
+    annotated_data = {}
+    for query, disease in queries:
+        annotated_data[query] = {}
+        disease_prefix = disease[:3]
+        
+        for document in doc_data["documents"]:
             doc_id = document["doc_id"]
-            if doc_id[:3] == disease:
-                annotate_data[i][query][doc_id] = 1
-            else:
-                annotate_data[i][query][doc_id] = 0
+            if doc_id[:3] == disease_prefix:
+                score = 1
+            else: 
+                score = 0
+            annotated_data[query][doc_id] = score
 
-    write_json(annotate_data, "annotated_data.json")
+    write_json(annotated_data, "annotated_data.json")
+
 
 def main():
     
@@ -68,6 +71,15 @@ def main():
         ("bloody stool feel need pass stools bowels empty", "Crohns Disease")
     ]
     annotate_data(queries, doc_data)
-    
+    relevance_data = load_json("annotated_data.json")
+    queries = [query[0] for query in queries]
+    model = BM25(doc_data)
+    model.calculate_scores("difficulty breathing loss smell event")
+    hits = model.top_docs(k=5)
+
+    print("BM25 Scores:", model.scores)
+    print("Top Documents:", hits)
+    print(mean_avg_precision(queries, relevance_data, hits))
+
 if __name__ == "__main__":
     main()
