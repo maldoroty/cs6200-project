@@ -40,22 +40,23 @@ class BM25:
     def top_docs(self, k):
         return sorted(self.scores, key=lambda x: x[1], reverse=True)[:k]
 
-def mean_avg_precision(queries, relevance_data, hits):
-    avg_p = []
-    for query in queries:
-        rel = 0
-        prec = 0
-        relevant_docs = relevance_data[query]
+    def mean_avg_precision(self, queries, relevance_data, k):
+        avg_p = []
+        for query in queries:
+            rel = 0
+            prec = 0
+            relevant_docs = relevance_data[query]
+            self.calculate_scores(query)
+            hits = self.top_docs(k)
+            for i, (doc_id, _) in enumerate(hits):
+                if doc_id in relevant_docs and relevant_docs[doc_id] == 1:
+                    rel += 1
+                    prec += rel / (i + 1)
 
-        for i, (doc_id, _) in enumerate(hits):
-            if doc_id in relevant_docs and relevant_docs[doc_id] == 1:
-                rel += 1
-                prec += rel / (i + 1)
+            if rel > 0:
+                avg_p.append(prec / rel)
+            else:
+                avg_p.append(0)
 
-        if rel > 0:
-            avg_p.append(prec / rel)
-        else:
-            avg_p.append(0)
-
-    map = sum(avg_p) / len(avg_p)
-    return map
+        map = sum(avg_p) / len(avg_p)
+        return map
