@@ -20,17 +20,25 @@ class BM25_updated_rel:
         self.avg_doc_length = self.calculate_avg_doc_length()
         self.scores = {}
 
-        self.prevalence = {'flu': 0.00783368484, 'covid': 0.00002044893, 'diabetes': 0.089, 'addisons disease': 0.00001 , 'depression': 0.184, 'cardiac arrest': 0.00107261223,'asthma': 0.08333333333, 'glaucoma': 0.00903886712, 'leukemia': 0.00147898463, 'crohns disease': 0.01}
+        self.prevalence = {'flu': 0.00783368484, 'covid': 0.00002044893, 
+                           'diabetes': 0.089, 'addisons disease': 0.00001 , 
+                           'depression': 0.184, 'cardiac arrest': 0.00107261223,
+                           'asthma': 0.08333333333, 'glaucoma': 0.00903886712, 
+                           'leukemia': 0.00147898463, 'crohns disease': 0.01}
 
-        self.id_to_disease = {'Flu': 'flu', 'Cov': 'covid', 'Dia': 'diabetes', 'Add': 'addisons disease', 'Dep': 'depression', 'Car': 'cardiac arrest', 'Ast': 'asthma', 'Gla': 'glaucoma', 'Leu': 'leukemia', 'Cro': 'crohns disease'}
+        self.id_to_disease = {'Flu': 'flu', 'Cov': 'covid', 'Dia': 'diabetes', 'Add': 'addisons disease', 
+                              'Dep': 'depression', 'Car': 'cardiac arrest', 'Ast': 'asthma', 'Gla': 'glaucoma', 
+                              'Leu': 'leukemia', 'Cro': 'crohns disease'}
 
 
     def get_doc_vectors(self):
         """
         Create document vectors (term frequency counters).
 
-        Returns:
-        - dict: A dictionary where keys are document IDs and values are Counter objects representing document vectors.
+        Returns
+        -------
+        dict
+            A dictionary where keys are document IDs and values are Counter objects representing document vectors.
         """
         document_vectors = {}
         for document in self.documents["documents"]:
@@ -42,9 +50,12 @@ class BM25_updated_rel:
         """
         Calculate the average document length.
 
-        Returns:
-        - float: The average document length.
+        Returns
+        -------
+        float
+            The average document length.
         """
+
         total_length = sum(sum(self.doc_vectors[id].values()) for id in self.doc_vectors.keys())
         return total_length / self.doc_count
     
@@ -52,8 +63,10 @@ class BM25_updated_rel:
         """
         Calculate BM25 scores for each document with respect to the given query.
 
-        Parameters:
-        - query (str): The query for which BM25 scores are calculated.
+        Parameters
+        ----------
+        query : str
+            The query for which BM25 scores are calculated.
         """
         scores = []
         for id in self.doc_vectors.keys():
@@ -71,39 +84,64 @@ class BM25_updated_rel:
         self.scores[query] = scores
 
 
-    def top_docs(self, query, k, metric="tfidf"):
+    def top_docs(self, query, k, metric="tfidf", to_sort=True):
         """
         Get the top-k documents.
 
-        Parameters:
-        - query (str): The query for which top documents are retrieved.
-        - k (int): The number of top documents to retrieve.
+        Parameters
+        ----------
+        query : str
+            The query for which top documents are retrieved.
+        k : int 
+            The number of top documents to retrieve.
+        metric : str
+            Which scoring metric to use.
+        to_sort : bool
+            Whether or not to sort the doc scores.
 
-        Returns:
-        - list: A list of tuples containing document IDs and their corresponding BM25 scores, sorted by score in descending order.
+        Returns
+        -------
+        list
+            A list of tuples containing document IDs and their corresponding BM25 scores.
         """
         if query not in self.scores:
             self.calculate_scores(query)
 
-
+        scores = None
         if metric == "zero_to_five_weighted":
-            weighted_scores = self.get_rarity(query)
-            return sorted(weighted_scores, key=lambda x: x[1], reverse=True)[:k]
+            scores = self.get_rarity(query)
         
         elif metric == "zero_to_five":
-            zero_to_five_scores = self.updated_scores(query)
-            return sorted(zero_to_five_scores, key=lambda x: x[1], reverse=True)[:k]
+            scores = self.updated_scores(query)
         
         elif metric == "tfidf":
-            return sorted(self.scores[query], key=lambda x: x[1], reverse=True)[:k]
+            scores = self.scores[query]
+        
+        if to_sort:
+            return sorted(scores, key=lambda x: x[1], reverse=True)[:k]
+        else:
+            return scores
     
     def updated_scores(self, query):
+        """ Returns a list of scores for the given query that are scaled to a
+        range of 0 to 5. This allows a much easier understanding of document
+        relevancy.
+
+        Parameters
+        ----------
+        query : str
+            The query to retrieve the transformed scores for.
+        
+        Returns
+        -------
+        list[tuple[str, float]]
+            List of doc scores tuples
+        """
 
         scores = self.scores[query]
         
         rounded_score_list = []
         for id, score in scores:
-
             
             all_scores = [a_score for a_id, a_score in scores]
 
@@ -115,6 +153,20 @@ class BM25_updated_rel:
 
     
     def get_rarity(self, query):
+        """ Returns a list of scores for the given query that are scaled to a
+        range of 0 to 5 which are also weighted using that disease's rarity.
+
+        Parameters
+        ----------
+        query : str
+            The query to retrieve the transformed scores for.
+        
+        Returns
+        -------
+        list[tuple[str, float]]
+            List of doc scores tuples
+        """
+
         scores = self.updated_scores(query)
 
         rarity_scores = []
@@ -130,6 +182,21 @@ class BM25_updated_rel:
         
     
     def norm(self, val, all_vals):
+        """ Normalizes the given value to a range between 0 and 1 using the given list
+        of values.
+
+        Parameters
+        ----------
+        val : float
+            The value to normalize.
+        all_vals : list[float]
+            The rest of values that are used to normalize the given val.
+        
+        Returns
+        -------
+        float
+            The normalized value.
+        """
         min_value = min(all_vals)
         max_value = max(all_vals)
         norm_value = (val - min_value) / (max_value - min_value)
@@ -138,6 +205,18 @@ class BM25_updated_rel:
 
     
     def dcg(self, doc_scores):
+        """ Calculates the Discounted Cumulative Gain of the given document scores.
+
+        Parameters
+        ----------
+        doc_scores : list[tuple[str, float]]
+            The document scores to calculate the DCG for.
+        
+        Returns
+        -------
+        float
+            The DCG of the given document scores.
+        """
 
         dcg_val = 0
         for i, id_score in enumerate(doc_scores, start=1):
@@ -145,6 +224,31 @@ class BM25_updated_rel:
             dcg_val += ((2 ** score) - 1) / (math.log2(i + 1))
 
         return dcg_val
+    
+
+    def ndcg(self, doc_scores):
+        """ Calculates the Normalized Discounted Cumulative Gain (nDCG) of the
+        given document scores.
+
+        Parameters
+        ----------
+        doc_scores : list[tuple[str, float]]
+            The document scores to calculate the DCG for.
+        
+        Returns
+        -------
+        float
+            The DCG of the given document scores.
+        """
+        
+        sorted_rel_scores = sorted(doc_scores, key=lambda x: x[1], reverse = True)
+        idcg = self.dcg(sorted_rel_scores)
+        if idcg == 0:
+            return 0
+        else:
+            ndcg = self.dcg(doc_scores) / idcg
+            return ndcg
+
 
 
 
